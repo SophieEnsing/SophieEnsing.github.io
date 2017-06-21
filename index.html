@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+ 	<head>
+	    <meta charset="utf-8">
+	    <title>Sophie Ensing</title>
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
+	    <script type="text/javascript" src="d3/d3.v3.js"></script>
+	</head>
+
+	<body>
+		<div class="row">
+			<div class = "sidebar col-md-3 col-md-offset-1">
+				<div class="intro">
+					<h5>Gender inequality in the film industry</h5>
+
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mi quam, sodales vitae orci eu, pulvinar dictum justo. Nunc mauris dolor, ullamcorper vel elit non, egestas imperdiet magna. Sed porttitor id turpis ullamcorper facilisis. Donec eu placerat justo. Aliquam viverra fermentum libero, condimentum dapibus velit blandit vel.</p>
+				</div>
+			</div>	
+
+			<div class="parallel col-md-8">
+			</div>
+		</div>
+
+		<div class="row">
+			<div id ="info" class="info col-md-3 col-md-offset-1">
+				<span id="filmtitle"></span><span id="filmyear"></span>
+			</div>
+		</div>
+
+		<script>
+
+			var margin = {top: 30, right: 10, bottom: 10, left: 10},
+			    width = 960 - margin.left - margin.right,
+			    height = 275 - margin.top - margin.bottom;
+
+			var x = d3.scale.ordinal().rangePoints([0, width], 1),
+			    y = {};
+
+			var line = d3.svg.line(),
+			    axis = d3.svg.axis().orient("left"),
+			    background,
+			    foreground;
+
+			var svg = d3.select(".parallel").append("svg")
+			    .attr("width", width + margin.left + margin.right)
+			    .attr("height", height + margin.top + margin.bottom)
+			  .append("g")
+			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			var prevElem, prevColour;
+			    	
+			d3.csv("films.csv", function(error, films) {
+
+			  // Extract the list of dimensions and create a scale for each.
+			  x.domain(dimensions = d3.keys(films[0]).filter(function(d) {
+			    return d != "title" && d != "genre" && d != "id" && d != "poster" && d != "production" && d != "year" && (y[d] = d3.scale.linear()
+			        .domain(d3.extent(films, function(p) { return +p[d]; }))
+			        .range([height, 0]));
+			  }));
+
+			  // Add grey background lines for context.
+			  background = svg.append("g")
+			      .attr("class", "background")
+			    .selectAll("path")
+			      .data(films)
+			    .enter().append("path")
+			      .attr("d", path);
+
+			  // Add blue foreground lines for focus.
+			  foreground = svg.append("g")
+			      .attr("class", "foreground")
+			    .selectAll("path")
+			      .data(films)
+			    .enter().append("path")
+			      .attr("d", path)
+			      .on('click', function(data) {
+			      	this.parentNode.appendChild(this)
+					d3.select(this).style('stroke', '#6EFECD')
+						.style('stroke-width', 2);
+					document.getElementById("filmtitle").innerHTML = data.title;
+					document.getElementById("filmyear").innerHTML = " (" + data.year + ")";
+				  });
+
+			  // Add a group element for each dimension.
+			  var g = svg.selectAll(".dimension")
+			      .data(dimensions)
+			    .enter().append("g")
+			      .attr("class", "dimension")
+			      .attr("transform", function(d) { return "translate(" + x(d) + ")"; });
+
+			  // Add an axis and title.
+			  g.append("g")
+			      .attr("class", "axis")
+			      .each(function(d) { d3.select(this).call(axis.scale(y[d])); })
+			    .append("text")
+			      .style("text-anchor", "middle")
+			      .attr("y", -9)
+			      .text(function(d) { return d; });
+
+			  // Add and store a brush for each axis.
+			  g.append("g")
+			      .attr("class", "brush")
+			      .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brush", brush)); })
+			    .selectAll("rect")
+			      .attr("x", -8)
+			      .attr("width", 16);
+			});
+
+			// Returns the path for a given data point.
+			function path(d) {
+			  return line(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
+			}
+
+			// Handles a brush event, toggling the display of foreground lines.
+			function brush() {
+			  var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
+			      extents = actives.map(function(p) { return y[p].brush.extent(); });
+			  foreground.style("display", function(d) {
+			    return actives.every(function(p, i) {
+			      return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+			    }) ? null : "none";
+			  });
+			}
+
+			function printObject(o) {
+			  var out = '';
+			  for (var p in o) {
+			    out += p + ': ' + o[p] + '\n';
+			  }
+			  alert(out);
+			}
+
+		</script>
+	</body>
+</html>
