@@ -1,48 +1,92 @@
-h5, #filmtitle, #filmyear{
-	font-family: Futura;
-	font-weight: 600;
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    font-family: 'Merriweather', serif;
+}
+
+svg {
+  font: 10px sans-serif;
+  float: left;
+}
+
+h5, #filmtitle, #filmyear, #filtertitle{
+  font-size: 10pt;
+  font-family: Futura;
+  font-weight: 600;
   text-transform: uppercase;
 }
 
-p {
-	font-family: 'Merriweather', serif;
-	font-size: 8pt;
-	text-align: justify;
-	line-height: 140%;
-	color: #313131;
+#genre {
+  font-style: italic;
+}
+
+button {
+    color: black;
+    /*border: 2px dashed #6EFECD;*/
+    border: none;
+    background-color: white;
+    font-size: 8pt;
+    /*padding: 10px;
+    /*width: 100%;
+    /*text-align: center;*/
+    text-decoration: underline #6EFECD;
+    display: inline-block;
+    margin-left: -8px;
+    font-style: italic;
+    color: #313131;
+}
+
+p, .checkboxes{
+  font-family: 'Merriweather', serif;
+  font-size: 8pt;
+  text-align: justify;
+  line-height: 140%;
+  color: #313131;
+}
+
+.checkboxes{
+  margin-left: -15px;
+}
+
+input {
+  margin-top: 10px;
+}
+
+.filter{
+  font-family: 'Merriweather', serif;
+  text-align: justify;
+  line-height: 140%;
+  color: #313131;
 }
 
 .intro {
-	width: 215px;
+  width: 300px;
+  padding-top: 20px;
+}
+
+.parallel, .filterrow {
   padding-top: 20px;
 }
 
 .parallel {
-  padding-top: 20px;
-}
-
-svg {
-	font: 10px sans-serif;
-	float: left;
+  margin-left: -10px;
 }
 
 .background path {
   fill: none;
-  stroke: #ddd;
+  stroke: #ccc;
+  stroke-opacity: .2;
   shape-rendering: crispEdges;
-  stroke-width: 1px;
-
 }
 
+/* REMOVED STROKE COLOR FROM HERE */
 .foreground path {
   fill: none;
-  stroke: #349496;
-  stroke-width: 1px;
+  stroke-opacity: .5;
 }
 
-.iets {
-  fill: none;
-  stroke: #CC222D;
+.filtercolumn {
+  margin-left: 57px;
 }
 
 .brush .extent {
@@ -51,12 +95,14 @@ svg {
   shape-rendering: crispEdges;
 }
 
-.axis line, .axis path {
+.axis line,
+.axis path {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
 
 .axis text {
-  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+  text-shadow: 0 1px 0 #fff;
+  cursor: move;
 }

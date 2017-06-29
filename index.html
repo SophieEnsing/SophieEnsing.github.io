@@ -18,7 +18,15 @@
 				<div class="intro">
 					<h5>Gender inequality in the film industry</h5>
 
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mi quam, sodales vitae orci eu, pulvinar dictum justo. Nunc mauris dolor, ullamcorper vel elit non, egestas imperdiet magna. Sed porttitor id turpis ullamcorper facilisis. Donec eu placerat justo. Aliquam viverra fermentum libero, condimentum dapibus velit blandit vel.</p>
+					<p>The goal of this visualisation is to show the multi-facetted inequality in the Hollywood film industry. The films are plotted in the graph on the right, where every line is a single film. On the vertical axes are several variables that show several aspects of the film.</p>
+
+					<p>Select a line to get more information about the film by <strong>clicking</strong> on the line. 
+					When you want to see information about another film, first press <strong>escape</strong> and then click another line. If you want to keep the selected line visible in the graph, just click another line. When you want to remove all selections click the button below.<br><p>
+					
+					<p>Make a selection along the y-axis to cluster data and analyse patterns. To remove the selection, click on the y-axis.<br></p>
+
+					<em><p id="counter">0/1369 films brushed</p></em>
+					<button onclick="removeSelect();">Remove selected films</button>
 				</div>
 			</div>	
 
@@ -26,115 +34,267 @@
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row filterrow">
 			<div id ="info" class="info col-md-3 col-md-offset-1">
-				<span id="filmtitle"></span><span id="filmyear"></span>
+					<span id="filmtitle">Click on a line</span><span id="filmyear"></span><br>
+					<p id="genre"></p>
+					<p id="filminfo"></p>
+					<p id="writer"></p>
+					<p id="producer"></p>
+
+
 			</div>
-		</div>
+
+			<div class= 'col-md-3 filtercolumn'>
+				<span id="filtertitle">Filter by genre</span><br>
+				<div class = 'col-md-6 checkboxes'>
+					<input type="checkbox" class="myCheckbox" value="Action" checked> Action </input><br>
+		    		<input type="checkbox" class="myCheckbox" value="Adventure" checked> Adventure </input><br>
+		    		<input type="checkbox" class="myCheckbox" value="Animation" checked> Animation </input><br>
+		    		<input type="checkbox" class="myCheckbox" value="Biography" checked> Biography </input><br>
+					<input type="checkbox" class="myCheckbox" value="Comedy" checked> Comedy </input><br>
+					<input type="checkbox" class="myCheckbox" value="Crime" checked> Crime </input><br>
+		    		<input type="checkbox" class="myCheckbox" value="Drama" checked> Drama </input><br>
+		   		 	<input type="checkbox" class="myCheckbox" value="Fantasy" checked> Fantasy </input><br>
+	   		 	</div>
+
+	   		 	<div class = 'col-md-6 checkboxes'>
+		   		 	<input type="checkbox" class="myCheckbox" value="Film-Noir" checked> Film-Noir </input><br>
+	   		 		<input type="checkbox" class="myCheckbox" value="Horror" checked> Horror </input><br>
+		    		<input type="checkbox" class="myCheckbox" value="Mystery" checked> Mystery </input><br>
+		   		 	<input type="checkbox" class="myCheckbox" value="Romance" checked> Romance </input><br>
+		    		<input type="checkbox" class="myCheckbox" value="Short" checked> Short </input><br>
+		    		<input type="checkbox" class="myCheckbox" value="Sci-Fi" checked> Sci-Fi </input><br>
+		    		<input type="checkbox" class="myCheckbox" value="Thriller" checked> Thriller </input><br>
+		    		<input type="checkbox" class="myCheckbox" value="Western" checked> Western </input>
+		    	</div>
+			</div>
+
+<!---			<div class="col-md-3">
+				<input type="text" id="search" placeholder="Search Films..."></input>
+			</div>
+		</div> -->
 
 		<script>
+		var m = [30, 10, 10, 10],
+		    w = 850 - m[1] - m[3],
+		    h = 340 - m[0] - m[2];
 
-			var margin = {top: 30, right: 10, bottom: 10, left: 10},
-			    width = 960 - margin.left - margin.right,
-			    height = 275 - margin.top - margin.bottom;
+		var x = d3.scale.ordinal().rangePoints([0, w], 1),
+		    y = {},
+		    dragging = {};
 
-			var x = d3.scale.ordinal().rangePoints([0, width], 1),
-			    y = {};
+		var line = d3.svg.line(),
+		    axis = d3.svg.axis().orient("left"),
+		    background,
+		    foreground;
 
-			var line = d3.svg.line(),
-			    axis = d3.svg.axis().orient("left"),
-			    background,
-			    foreground;
+		var svg = d3.select(".parallel").append("svg")
+		    .attr("width", w + m[1] + m[3])
+		    .attr("height", h + m[0] + m[2])
+		  .append("g")
+		    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-			var svg = d3.select(".parallel").append("svg")
-			    .attr("width", width + margin.left + margin.right)
-			    .attr("height", height + margin.top + margin.bottom)
-			  .append("g")
-			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		var selected = 'False'
 
-			var prevElem, prevColour;
-			    	
-			d3.csv("films.csv", function(error, films) {
+		// CREATE A COLOR SCALE
+		var color = d3.scale.ordinal()
+		  .domain(['Mystery', 'Romance', 'Short', 'Sci-Fi', 'Horror', 'Thriller', 'Film-Noir', 'Crime', 'Drama', 'Fantasy', 'Animation', 'Adventure', 'Action', 'Comedy', 'Biography', 'Western'])
+		  .range(['#E74C3C','#9B59B6','#5499C7', '#48C9B0', '#E74C3C','#9B59B6','#5499C7', '#48C9B0', '#E74C3C','#9B59B6','#5499C7', '#48C9B0',
+		  	'#E74C3C','#9B59B6','#5499C7', '#48C9B0']);
+		  //'#229954', '#F7DC6F', '#F5B041', '#D35400', '#1A5276', '#FA8072', '#2E4053', '#B7950B', '#784212', '#641E16', '#A3E4D7', '#D7BDE2'
 
-			  // Extract the list of dimensions and create a scale for each.
-			  x.domain(dimensions = d3.keys(films[0]).filter(function(d) {
-			    return d != "title" && d != "genre" && d != "id" && d != "poster" && d != "production" && d != "year" && (y[d] = d3.scale.linear()
-			        .domain(d3.extent(films, function(p) { return +p[d]; }))
-			        .range([height, 0]));
-			  }));
 
-			  // Add grey background lines for context.
-			  background = svg.append("g")
-			      .attr("class", "background")
-			    .selectAll("path")
-			      .data(films)
-			    .enter().append("path")
-			      .attr("d", path);
+		d3.csv("films.csv", function(error, films) {
 
-			  // Add blue foreground lines for focus.
-			  foreground = svg.append("g")
-			      .attr("class", "foreground")
-			    .selectAll("path")
-			      .data(films)
-			    .enter().append("path")
-			      .attr("d", path)
-			      .on('click', function(data) {
-			      	this.parentNode.appendChild(this)
-					d3.select(this).style('stroke', '#6EFECD')
-						.style('stroke-width', 2);
-					document.getElementById("filmtitle").innerHTML = data.title;
-					document.getElementById("filmyear").innerHTML = " (" + data.year + ")";
-				  });
+		  // Extract the list of dimensions and create a scale for each.
+		  x.domain(dimensions = d3.keys(films[0]).filter(function(d) {
+		    return d != "title" && d != "genre" && d != "imdb_id" && d != "poster" && d != "production" && d != "year" 
+		                && d != "director" && d != "writer" && d != "firstgenre" && d != "genderdir" && d != "" && d != "producers"  
+		                && d != "writerlist" && d != "writergender" && (y[d] = d3.scale.linear()
+		        .domain(d3.extent(films, function(p) { return +p[d]; }))
+		        .range([h, 0]));
+		  }));
 
-			  // Add a group element for each dimension.
-			  var g = svg.selectAll(".dimension")
-			      .data(dimensions)
-			    .enter().append("g")
-			      .attr("class", "dimension")
-			      .attr("transform", function(d) { return "translate(" + x(d) + ")"; });
+		  // Add grey background lines for context.
+		  background = svg.append("g")
+		      .attr("class", "background")
+		    .selectAll("path")
+		      .data(films)
+		    .enter().append("path")
+		      .attr("d", path);
 
-			  // Add an axis and title.
-			  g.append("g")
-			      .attr("class", "axis")
-			      .each(function(d) { d3.select(this).call(axis.scale(y[d])); })
-			    .append("text")
-			      .style("text-anchor", "middle")
-			      .attr("y", -9)
-			      .text(function(d) { return d; });
+		  // USE THE COLOR SCALE TO SET THE STROKE BASED ON THE DATA
+		  foreground = svg.append("g")
+		      .attr("class", "foreground")
+		    .selectAll("path")
+		      .data(films)
+		    .enter().append("path")
+		      .attr("d", path)
+		      .attr("stroke", function(d) {
+		        var genre = d.firstgenre;
+		        return color(genre);
+		      })
+		      .on('click', function(data) {
+		      	  selected = 'True'
+		          this.parentNode.appendChild(this)
+		          var selectedline = d3.select(this)
+		          selectedline.style('stroke', '#6EFECD')
+		          selectedline.style('stroke-opacity', 1)
+		            .style('stroke-width', 4);
+		          document.getElementById("filmtitle").innerHTML = data.title;
+				  document.getElementById("filmyear").innerHTML = " (" + data.year + ")";
+		          document.getElementById("genre").innerHTML = data.genre ;
+		          document.getElementById("filminfo").innerHTML = "Director(s): " + data.director;
+		          document.getElementById("writer").innerHTML = 'Writer(s): ' + data.writer;
 
-			  // Add and store a brush for each axis.
-			  g.append("g")
-			      .attr("class", "brush")
-			      .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brush", brush)); })
-			    .selectAll("rect")
-			      .attr("x", -8)
-			      .attr("width", 16);
-			});
+		          document.onkeydown = function(evt) {
+		          	  selected = 'False'
+		              evt = evt || window.event;
+		              if (evt.keyCode == 27) {
+		                  selectedline.style('stroke-width', 1);
+		                  selectedline.style('stroke', function(d) {
+		                    var genre = d.firstgenre;
+		                    return color(genre);
+		                  })
+		              document.getElementById("filmtitle").innerHTML = 'Click on a line';
+		              document.getElementById("filmyear").innerHTML = '';		              
+		              document.getElementById("genre").innerHTML = '';
+		              document.getElementById("filminfo").innerHTML = '';
+		              document.getElementById("writer").innerHTML = '';
 
-			// Returns the path for a given data point.
-			function path(d) {
-			  return line(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
-			}
+		              }
+		          }
+		        })
+			   .on("mouseover", function(data){
+			   		if (selected === 'False'){
+			    	var mouseline = d3.select(this)
+			    	document.getElementById("filmtitle").innerHTML = data.title;
+			    	}
+			    });
 
-			// Handles a brush event, toggling the display of foreground lines.
-			function brush() {
-			  var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
-			      extents = actives.map(function(p) { return y[p].brush.extent(); });
-			  foreground.style("display", function(d) {
-			    return actives.every(function(p, i) {
-			      return extents[i][0] <= d[p] && d[p] <= extents[i][1];
-			    }) ? null : "none";
-			  });
-			}
+		  // Add a group element for each dimension.
+		  var g = svg.selectAll(".dimension")
+		      .data(dimensions)
+		    .enter().append("g")
+		      .attr("class", "dimension")
+		      .attr("transform", function(d) { return "translate(" + x(d) + ")"; })
+		      .call(d3.behavior.drag()
+		        .on("dragstart", function(d) {
+		          dragging[d] = this.__origin__ = x(d);
+		          background.attr("visibility", "hidden");
+		        })
+		        .on("drag", function(d) {
+		          dragging[d] = Math.min(w, Math.max(0, this.__origin__ += d3.event.dx));
+		          foreground.attr("d", path);
+		          dimensions.sort(function(a, b) { return position(a) - position(b); });
+		          x.domain(dimensions);
+		          g.attr("transform", function(d) { return "translate(" + position(d) + ")"; })
+		        })
+		        .on("dragend", function(d) {
+		          delete this.__origin__;
+		          delete dragging[d];
+		          transition(d3.select(this)).attr("transform", "translate(" + x(d) + ")");
+		          transition(foreground)
+		              .attr("d", path);
+		          background
+		              .attr("d", path)
+		              .transition()
+		              .delay(500)
+		              .duration(0)
+		              .attr("visibility", null);
+		        }));
 
-			function printObject(o) {
-			  var out = '';
-			  for (var p in o) {
-			    out += p + ': ' + o[p] + '\n';
-			  }
-			  alert(out);
-			}
+		  // Add an axis and title.
+		  g.append("g")
+		      .attr("class", "axis")
+		      .each(function(d) { d3.select(this).call(axis.scale(y[d])); })
+		    .append("text")
+		      .attr("text-anchor", "middle")
+		      .attr("y", -9)
+		      .text(String);
 
+		  // Add and store a brush for each axis.
+		  g.append("g")
+		      .attr("class", "brush")
+		      .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brushstart", brushstart).on("brush", brush)); })
+		    .selectAll("rect")
+		      .attr("x", -8)
+		      .attr("width", 16);
+		});
+
+		d3.selectAll(".myCheckbox").on("change", function() {
+		  var genre = this.value,
+		  display = this.checked ? "inline" : "none";
+		  console.log(genre)
+
+		  svg.selectAll("path")
+		    .filter(function(d) { return d.firstgenre === genre; })
+		    // return d.firstgenre.indexOf('genre') != -1;
+		    .attr("display", display);
+		});
+
+		function checkedAll() {
+		    // this refers to the clicked checkbox
+		    // find all checkboxes inside the checkbox' form
+		    var elements = this.form.getElementsByTagName('input');
+		    // iterate and change status
+		    for (var i = elements.length; i--; ) {
+		        if (elements[i].type == 'checkbox') {
+		            elements[i].checked = this.checked;
+		        }
+		    }
+		}
+
+		function removeSelect() {
+			d3.selectAll("path")
+				.style('stroke-width', 1)
+		    	.attr("stroke", function(d) {
+			        var genre = d.firstgenre;
+			        return color(genre);
+			      })
+            document.getElementById("filmtitle").innerHTML = 'Click on a line';
+            document.getElementById("filmyear").innerHTML = '';		              
+            document.getElementById("genre").innerHTML = '';
+            document.getElementById("filminfo").innerHTML = '';
+          }
+
+		function position(d) {
+		  var v = dragging[d];
+		  return v == null ? x(d) : v;
+		}
+
+		function transition(g) {
+		  return g.transition().duration(500);
+		}
+
+		// Returns the path for a given data point.
+		function path(d) {
+		  return line(dimensions.map(function(p) { return [position(p), y[p](d[p])]; }));
+		}
+
+		// When brushing, don’t trigger axis dragging.
+		function brushstart() {
+		  d3.event.sourceEvent.stopPropagation();
+		}
+
+		// Handles a brush event, toggling the display of foreground lines.
+		function brush() {
+		  var count = 0
+		  var actives = dimensions.filter(function(p) { 
+		  		return !y[p].brush.empty(); 
+		  	}),
+		      extents = actives.map(function(p) { return y[p].brush.extent(); });
+		  foreground.style("display", function(d) {
+		    return actives.every(function(p, i) {
+		      if (extents[i][0] <= d[p] && d[p] <= extents[i][1]) {
+		      	count += 1;
+		      	document.getElementById("counter").innerHTML = count + '/1369 films selected';
+		      }
+		      return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+		    }) ? null : "none";
+		  });
+		}
 		</script>
 	</body>
 </html>
