@@ -21,12 +21,12 @@
 					<p>The goal of this visualisation is to show the multi-facetted inequality in the Hollywood film industry. The films are plotted in the graph on the right, where every line is a single film. On the vertical axes are several variables that show several aspects of the film.</p>
 
 					<p>Select a line to get more information about the film by <strong>clicking</strong> on the line. 
-					When you want to see information about another film, first press <strong>escape</strong> and then click another line. If you want to keep the selected line visible in the graph, just click another line. When you want to remove all selections click the button below.<br><p>
+					When you want to see information about another film, just click another line. When you want to remove the 
+					selected lines press the <strong>ESC</strong> key.<br><p>
 					
-					<p>Make a selection along the y-axis to cluster data and analyse patterns. To remove the selection, click on the y-axis.<br></p>
+					<p>Make a selection along the y-axis to select data and analyse patterns. To remove the selection, click on the y-axis. It is also possible to drag an axis to another place.<br></p>
 
-					<em><p id="counter">0/1369 films brushed</p></em>
-					<button onclick="removeSelect();">Remove selected films</button>
+					<em><p id="counter">1285/1285 films</p></em>
 				</div>
 			</div>	
 
@@ -37,43 +37,56 @@
 		<div class="row filterrow">
 			<div id ="info" class="info col-md-3 col-md-offset-1">
 					<span id="filmtitle">Click on a line</span><span id="filmyear"></span><br>
-					<p id="genre"></p>
+					<p id="genre">More information about the film will be shown.</p>
 					<p id="filminfo"></p>
 					<p id="writer"></p>
 					<p id="producer"></p>
+					<p id="cast"></p>
 
 
 			</div>
 
-			<div class= 'col-md-3 filtercolumn'>
+			<div class= 'col-md-4 filtercolumn'>
 				<span id="filtertitle">Filter by genre</span><br>
+				<p><em>Multiple genres can be selected.</em></p>
 				<div class = 'col-md-6 checkboxes'>
-					<input type="checkbox" class="myCheckbox" value="Action" checked> Action </input><br>
-		    		<input type="checkbox" class="myCheckbox" value="Adventure" checked> Adventure </input><br>
-		    		<input type="checkbox" class="myCheckbox" value="Animation" checked> Animation </input><br>
-		    		<input type="checkbox" class="myCheckbox" value="Biography" checked> Biography </input><br>
-					<input type="checkbox" class="myCheckbox" value="Comedy" checked> Comedy </input><br>
-					<input type="checkbox" class="myCheckbox" value="Crime" checked> Crime </input><br>
-		    		<input type="checkbox" class="myCheckbox" value="Drama" checked> Drama </input><br>
-		   		 	<input type="checkbox" class="myCheckbox" value="Fantasy" checked> Fantasy </input><br>
+					<input type="checkbox" onClick="toggle(this)" checked> All genres</input><br>
+					<br>
+					<input type="checkbox" class="myCheckbox" name="foo" value="Action" checked> Action </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Adventure" checked> Adventure </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Animation" checked> Animation </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Biography" checked> Biography </input><br>
+					<input type="checkbox" class="myCheckbox" name="foo" value="Comedy" checked> Comedy </input><br>
+					<input type="checkbox" class="myCheckbox" name="foo" value="Crime" checked> Crime </input><br>
+		    		
 	   		 	</div>
 
 	   		 	<div class = 'col-md-6 checkboxes'>
-		   		 	<input type="checkbox" class="myCheckbox" value="Film-Noir" checked> Film-Noir </input><br>
-	   		 		<input type="checkbox" class="myCheckbox" value="Horror" checked> Horror </input><br>
-		    		<input type="checkbox" class="myCheckbox" value="Mystery" checked> Mystery </input><br>
-		   		 	<input type="checkbox" class="myCheckbox" value="Romance" checked> Romance </input><br>
-		    		<input type="checkbox" class="myCheckbox" value="Short" checked> Short </input><br>
-		    		<input type="checkbox" class="myCheckbox" value="Sci-Fi" checked> Sci-Fi </input><br>
-		    		<input type="checkbox" class="myCheckbox" value="Thriller" checked> Thriller </input><br>
-		    		<input type="checkbox" class="myCheckbox" value="Western" checked> Western </input>
+	   		 		<input type="checkbox" class="myCheckbox" name="foo" value="Drama" checked> Drama </input><br>
+		   		 	<input type="checkbox" class="myCheckbox" name="foo" value="Fantasy" checked> Fantasy </input><br>
+	   		 		<input type="checkbox" class="myCheckbox" name="foo" value="Horror" checked> Horror </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Mystery" checked> Mystery </input><br>
+		   		 	<input type="checkbox" class="myCheckbox" name="foo" value="Romance" checked> Romance </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Sci-Fi" checked> Sci-Fi </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Thriller" checked> Thriller </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Western" checked> Western </input>
 		    	</div>
 			</div>
 
-<!---			<div class="col-md-3">
-				<input type="text" id="search" placeholder="Search Films..."></input>
+			<div class="col-md-3">
+				<span id="searchtitle">Search for a film</span><br>
+				<p><em>Film suggestions will appear below.</em></p>
+				<input type="text" id="search" onkeyup="showResult(this.value)" placeholder="e.g. Inception">
+				<span class="results">
+					<li id="results0"></li>
+					<li id="results1"></li>
+					<li id="results2"></li>
+					<li id="results3"></li>
+					<li id="results4"></li>
+					<li id="results5"></li>
+				</span>
 			</div>
-		</div> -->
+		</div>
 
 		<script>
 		var m = [30, 10, 10, 10],
@@ -95,7 +108,7 @@
 		  .append("g")
 		    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-		var selected = 'False'
+		var selected = 'False'		
 
 		// CREATE A COLOR SCALE
 		var color = d3.scale.ordinal()
@@ -110,11 +123,19 @@
 		  // Extract the list of dimensions and create a scale for each.
 		  x.domain(dimensions = d3.keys(films[0]).filter(function(d) {
 		    return d != "title" && d != "genre" && d != "imdb_id" && d != "poster" && d != "production" && d != "year" 
-		                && d != "director" && d != "writer" && d != "firstgenre" && d != "genderdir" && d != "" && d != "producers"  
-		                && d != "writerlist" && d != "writergender" && (y[d] = d3.scale.linear()
+		                && d != "director" && d != "writer" && d != "secondgenre" && d != "genderdir" && d != "" && d != "producers"  
+		                && d != "genre1" && d != "genre2" && d != "genre3" && d != "femalewords" && d != "malewords"
+		                && d != "writerlist" && d != "writergender" && d != "actor" && (y[d] = d3.scale.linear()
 		        .domain(d3.extent(films, function(p) { return +p[d]; }))
 		        .range([h, 0]));
 		  }));
+
+
+		  	//put titles in array to search in array
+		  titles = [];
+		  for (index = 0, len = films.length; index < len; ++index) {
+		  	titles.push(films[index]['title']);    
+		  }
 
 		  // Add grey background lines for context.
 		  background = svg.append("g")
@@ -132,11 +153,12 @@
 		    .enter().append("path")
 		      .attr("d", path)
 		      .attr("stroke", function(d) {
-		        var genre = d.firstgenre;
+		        var genre = d.genre1;
 		        return color(genre);
 		      })
 		      .on('click', function(data) {
 		      	  selected = 'True'
+		      	  console.log(this.parentNode);
 		          this.parentNode.appendChild(this)
 		          var selectedline = d3.select(this)
 		          selectedline.style('stroke', '#6EFECD')
@@ -147,23 +169,14 @@
 		          document.getElementById("genre").innerHTML = data.genre ;
 		          document.getElementById("filminfo").innerHTML = "Director(s): " + data.director;
 		          document.getElementById("writer").innerHTML = 'Writer(s): ' + data.writer;
+		          document.getElementById("cast").innerHTML = 'Cast: ' + data.actor;
 
 		          document.onkeydown = function(evt) {
 		          	  selected = 'False'
 		              evt = evt || window.event;
 		              if (evt.keyCode == 27) {
-		                  selectedline.style('stroke-width', 1);
-		                  selectedline.style('stroke', function(d) {
-		                    var genre = d.firstgenre;
-		                    return color(genre);
-		                  })
-		              document.getElementById("filmtitle").innerHTML = 'Click on a line';
-		              document.getElementById("filmyear").innerHTML = '';		              
-		              document.getElementById("genre").innerHTML = '';
-		              document.getElementById("filminfo").innerHTML = '';
-		              document.getElementById("writer").innerHTML = '';
-
-		              }
+		              	  removeSelect();
+		            }
 		          }
 		        })
 			   .on("mouseover", function(data){
@@ -217,7 +230,7 @@
 		  // Add and store a brush for each axis.
 		  g.append("g")
 		      .attr("class", "brush")
-		      .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brushstart", brushstart).on("brush", brush)); })
+		      .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brushstart", brushstart).on("brush", brush));})
 		    .selectAll("rect")
 		      .attr("x", -8)
 		      .attr("width", 16);
@@ -226,37 +239,28 @@
 		d3.selectAll(".myCheckbox").on("change", function() {
 		  var genre = this.value,
 		  display = this.checked ? "inline" : "none";
-		  console.log(genre)
 
 		  svg.selectAll("path")
-		    .filter(function(d) { return d.firstgenre === genre; })
-		    // return d.firstgenre.indexOf('genre') != -1;
+		    .filter(function(d) { 
+		    	return String(d.genre).includes(String(genre)); 
+		    })
 		    .attr("display", display);
 		});
-
-		function checkedAll() {
-		    // this refers to the clicked checkbox
-		    // find all checkboxes inside the checkbox' form
-		    var elements = this.form.getElementsByTagName('input');
-		    // iterate and change status
-		    for (var i = elements.length; i--; ) {
-		        if (elements[i].type == 'checkbox') {
-		            elements[i].checked = this.checked;
-		        }
-		    }
-		}
 
 		function removeSelect() {
 			d3.selectAll("path")
 				.style('stroke-width', 1)
+				.style("stroke-opacity", .5)
 		    	.attr("stroke", function(d) {
-			        var genre = d.firstgenre;
+			        var genre = d.genre1;
 			        return color(genre);
 			      })
             document.getElementById("filmtitle").innerHTML = 'Click on a line';
             document.getElementById("filmyear").innerHTML = '';		              
-            document.getElementById("genre").innerHTML = '';
+            document.getElementById("genre").innerHTML = 'More information about the film will be shown.';
             document.getElementById("filminfo").innerHTML = '';
+            document.getElementById("writer").innerHTML = '';
+            document.getElementById("cast").innerHTML = '';
           }
 
 		function position(d) {
@@ -278,23 +282,126 @@
 		  d3.event.sourceEvent.stopPropagation();
 		}
 
+		function countInArray(array, what) {
+	    	var count = 0;
+		    for (var i = 0; i < array.length; i++) {
+		        if (array[i] === what) {
+		            count++;
+		        }
+		    }
+		    return count;
+		}
+
+
 		// Handles a brush event, toggling the display of foreground lines.
 		function brush() {
-		  var count = 0
+	 	  singles = []
+
+		  document.getElementById("counter").innerHTML = '1285/1285 films';
 		  var actives = dimensions.filter(function(p) { 
 		  		return !y[p].brush.empty(); 
 		  	}),
 		      extents = actives.map(function(p) { return y[p].brush.extent(); });
+		  brushesNumber = actives.length;
+
 		  foreground.style("display", function(d) {
 		    return actives.every(function(p, i) {
 		      if (extents[i][0] <= d[p] && d[p] <= extents[i][1]) {
-		      	count += 1;
-		      	document.getElementById("counter").innerHTML = count + '/1369 films selected';
+		      	singles.push(d.title);    
 		      }
 		      return extents[i][0] <= d[p] && d[p] <= extents[i][1];
 		    }) ? null : "none";
 		  });
+		  console.log(singles);
+		  //console.log(brushesNumber);
+		  realcount = 0;
+
+		  for (index = 0, len = singles.length; index < len; ++index) {
+		  	if (countInArray(singles, singles[index]) == brushesNumber){
+		  		realcount = realcount+1;
+		  	}
+		  }
+		  console.log(realcount/brushesNumber);
+		  document.getElementById("counter").innerHTML = realcount/brushesNumber + '/1285 films';
 		}
+
+
+		document.getElementById('search').onkeyup = function(e){
+			  var query = d3.select("#search")[0][0].value;
+			  console.log(query);
+			  results = []
+			  if (Object.keys(query).length+1 > 1){
+			  	c = 0;
+
+			  	for (index = 0, len = titles.length; index < len; ++index) {
+		  			if (titles[index].toLowerCase().includes(query.toLowerCase())){
+		  				//console.log(titles[index]);
+		  				results.push(titles[index])
+		  				c = c + 1;
+		  			}
+		  		}
+
+		  		results.forEach(function(obj) {
+				  for(var i in obj) { 
+				    if(obj[i] === undefined) {
+				      obj[i] = '';
+				    }
+				  }
+				});
+		  		document.getElementById("results0").innerHTML = results[0];
+		  		document.getElementById("results1").innerHTML = results[1];
+		  		document.getElementById("results2").innerHTML = results[2];
+		  		document.getElementById("results3").innerHTML = results[3];
+		  		document.getElementById("results4").innerHTML = results[4];
+		  		document.getElementById("results5").innerHTML = results[5];
+		      //console.log(Object.keys(query).length+1);
+	  		}
+
+		    if (!e) e = window.event;
+		    var keyCode = e.keyCode || e.which;
+		    if (keyCode == '13'){
+		      var query = d3.select("#search")[0][0].value;
+
+  		  	  var selected = d3.selectAll("path")
+		      .filter(function(d) { 
+		    	return String(d.title).toLowerCase() === (String(query).toLowerCase())
+		       })
+	          .attr('stroke', '#6EFECD')
+	          	.style('stroke-opacity', 1)
+	            .style('stroke-width', 4)
+		    };
+
+		    var foreground2 = d3.select("g").selectAll(".foreground");
+		    foreground2[0][0].appendChild(selected[0][0]);
+		    
+		    document.onkeydown = function(evt) {
+		          	  selected = 'False'
+		              evt = evt || window.event;
+		              if (evt.keyCode == 27) {
+		              	  removeSelect();
+		            }
+		        }
+		  }
+
+		  function toggle(source) {
+			  checkboxes = document.getElementsByName('foo');
+			  for(var i=0, n=checkboxes.length;i<n;i++) {
+			    checkboxes[i].checked = source.checked;
+			  }
+			  if (source.checked) {
+				    svg.selectAll("path")
+				    .filter(function(d) { 
+				    	return d.year > 1930 && d.year < 2020
+				       })
+			  		.attr("display", "inline")
+				} else { 
+				    svg.selectAll("path")
+				    .filter(function(d) { 
+				    	return d.year > 1930 && d.year < 2020
+				       })
+			  		.attr("display", "none")
+				}
+			}
 		</script>
 	</body>
 </html>

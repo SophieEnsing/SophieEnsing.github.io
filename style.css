@@ -9,7 +9,7 @@ svg {
   float: left;
 }
 
-h5, #filmtitle, #filmyear, #filtertitle{
+h5, #filmtitle, #filmyear, #filtertitle, #searchtitle{
   font-size: 10pt;
   font-family: Futura;
   font-weight: 600;
@@ -19,6 +19,13 @@ h5, #filmtitle, #filmyear, #filtertitle{
 #genre {
   font-style: italic;
 }
+
+li {
+  list-style: none;
+  font-size: 8pt;
+  margin-top: 7px;
+}
+
 
 button {
     color: black;
@@ -49,7 +56,8 @@ p, .checkboxes{
 }
 
 input {
-  margin-top: 10px;
+  font-style: italic;
+  font-size: 8pt;
 }
 
 .filter{
