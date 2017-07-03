@@ -27,6 +27,7 @@
 					<p>Make a selection along the y-axis to select data and analyse patterns. To remove the selection, click on the y-axis. It is also possible to drag an axis to another place.<br></p>
 
 					<em><p id="counter">1285/1285 films</p></em>
+					<em><p id="counter2">percentage</p></em>
 				</div>
 			</div>	
 
@@ -77,14 +78,8 @@
 				<span id="searchtitle">Search for a film</span><br>
 				<p><em>Film suggestions will appear below.</em></p>
 				<input type="text" id="search" onkeyup="showResult(this.value)" placeholder="e.g. Inception">
-				<span class="results">
-					<li id="results0"></li>
-					<li id="results1"></li>
-					<li id="results2"></li>
-					<li id="results3"></li>
-					<li id="results4"></li>
-					<li id="results5"></li>
-				</span>
+				<div id="results" class="results">
+				</div>
 			</div>
 		</div>
 
@@ -330,31 +325,24 @@
 			  var query = d3.select("#search")[0][0].value;
 			  console.log(query);
 			  results = []
+			  
+			  if (Object.keys(query).length === 0){
+		  		document.getElementById("results").innerHTML = '';
+			  }
+
 			  if (Object.keys(query).length+1 > 1){
 			  	c = 0;
 
 			  	for (index = 0, len = titles.length; index < len; ++index) {
 		  			if (titles[index].toLowerCase().includes(query.toLowerCase())){
 		  				//console.log(titles[index]);
-		  				results.push(titles[index])
+		  				results.push(titles[index] + '<br>')
 		  				c = c + 1;
 		  			}
 		  		}
+		  		results = results.join("")
 
-		  		results.forEach(function(obj) {
-				  for(var i in obj) { 
-				    if(obj[i] === undefined) {
-				      obj[i] = '';
-				    }
-				  }
-				});
-		  		document.getElementById("results0").innerHTML = results[0];
-		  		document.getElementById("results1").innerHTML = results[1];
-		  		document.getElementById("results2").innerHTML = results[2];
-		  		document.getElementById("results3").innerHTML = results[3];
-		  		document.getElementById("results4").innerHTML = results[4];
-		  		document.getElementById("results5").innerHTML = results[5];
-		      //console.log(Object.keys(query).length+1);
+				document.getElementById("results").innerHTML = results;		  		
 	  		}
 
 		    if (!e) e = window.event;

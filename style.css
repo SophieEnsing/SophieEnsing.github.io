@@ -26,6 +26,12 @@ li {
   margin-top: 7px;
 }
 
+.results {
+  overflow-y: scroll;
+  margin-top: 10px;
+  height: 120px;
+  font-size: 8pt;
+}
 
 button {
     color: black;
