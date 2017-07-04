@@ -160,6 +160,7 @@
 		    .selectAll("path")
 		      .data(films)
 		    .enter().append("path")
+		      .attr('stroke-width', 1.5)
 		      .attr("d", path);
 
 		  // USE THE COLOR SCALE TO SET THE STROKE BASED ON THE DATA

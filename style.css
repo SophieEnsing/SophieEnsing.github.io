@@ -114,7 +114,7 @@ input {
 .background path {
   fill: none;
   stroke: #ccc;
-  stroke-opacity: .2;
+  stroke-opacity: .5;
   shape-rendering: crispEdges;
 }
 
