@@ -14,20 +14,20 @@
 
 	<body>
 		<div class="row">
-			<div class = "sidebar col-md-3 col-md-offset-1">
+			<div class = "sidebar col-md-3">
 				<div class="intro">
 					<h5>Gender inequality in the film industry</h5>
 
-					<p>The goal of this visualisation is to show the multi-facetted inequality in the Hollywood film industry. The films are plotted in the graph on the right, where every line is a single film. On the vertical axes are several variables that show several aspects of the film.</p>
+					<p>This visualisation is about gender (in-)equality in the Hollywood film industry. 1285 films are plotted in the graph on the right, where every line is a single film. On the vertical axes are eight variables that show several aspects of the film. You can see the films titles on the left-bottom while hovering. You can also search for a film using the search bar or filter films by genre.</p>
 
-					<p>Select a line to get more information about the film by <strong>clicking</strong> on the line. 
+					<p>Select a line to get more information about the film by <strong>clicking</strong> on it. 
 					When you want to see information about another film, just click another line. When you want to remove the 
 					selected lines press the <strong>ESC</strong> key.<br><p>
 					
 					<p>Make a selection along the y-axis to select data and analyse patterns. To remove the selection, click on the y-axis. It is also possible to drag an axis to another place.<br></p>
 
 					<em><p id="counter">1285/1285 films</p></em>
-					<em><p id="counter2">percentage</p></em>
+					<em><p id="counter2">100% of all films</p></em>
 				</div>
 			</div>	
 
@@ -36,47 +36,67 @@
 		</div>
 
 		<div class="row filterrow">
-			<div id ="info" class="info col-md-3 col-md-offset-1">
+			<div id ="info" class="info col-md-5">
+				<div class="col-md-8 filminfo">
 					<span id="filmtitle">Click on a line</span><span id="filmyear"></span><br>
-					<p id="genre">More information about the film will be shown.</p>
+					<p id="genre">More information about the film will be shown</p>
 					<p id="filminfo"></p>
+					<p id="cast"></p>
 					<p id="writer"></p>
 					<p id="producer"></p>
-					<p id="cast"></p>
+				</div>
 
-
+				<div class="col-md-4 numbers">
+					<p id="gross"><p>
+					<p id="imdb"><p>
+					<p id="metacritic"><p>
+					<p id="fcast"><p>
+					<p id="fdirector"><p>
+					<p id="fproducer"><p>
+					<p id="fwriter"><p>
+					<p id="fwords"><p>
+				</div>
+					
 			</div>
 
 			<div class= 'col-md-4 filtercolumn'>
 				<span id="filtertitle">Filter by genre</span><br>
-				<p><em>Multiple genres can be selected.</em></p>
-				<div class = 'col-md-6 checkboxes'>
-					<input type="checkbox" onClick="toggle(this)" checked> All genres</input><br>
-					<br>
+				<p><em>Multiple genres can be selected</em></p>
+				<div class = 'col-md-4 checkboxes'>
+					<input type="checkbox" onClick="toggle(this)" checked> <strong>All genres</strong> </input><br>
 					<input type="checkbox" class="myCheckbox" name="foo" value="Action" checked> Action </input><br>
 		    		<input type="checkbox" class="myCheckbox" name="foo" value="Adventure" checked> Adventure </input><br>
 		    		<input type="checkbox" class="myCheckbox" name="foo" value="Animation" checked> Animation </input><br>
 		    		<input type="checkbox" class="myCheckbox" name="foo" value="Biography" checked> Biography </input><br>
 					<input type="checkbox" class="myCheckbox" name="foo" value="Comedy" checked> Comedy </input><br>
-					<input type="checkbox" class="myCheckbox" name="foo" value="Crime" checked> Crime </input><br>
-		    		
+					<input type="checkbox" class="myCheckbox" name="foo" value="Crime" checked> Crime </input>		    		
 	   		 	</div>
 
-	   		 	<div class = 'col-md-6 checkboxes'>
+	   		 	<div class = 'col-md-4 checkboxes'>
 	   		 		<input type="checkbox" class="myCheckbox" name="foo" value="Drama" checked> Drama </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Family" checked> Family </input><br>
 		   		 	<input type="checkbox" class="myCheckbox" name="foo" value="Fantasy" checked> Fantasy </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="History" checked> History </input><br>
 	   		 		<input type="checkbox" class="myCheckbox" name="foo" value="Horror" checked> Horror </input><br>
 		    		<input type="checkbox" class="myCheckbox" name="foo" value="Mystery" checked> Mystery </input><br>
-		   		 	<input type="checkbox" class="myCheckbox" name="foo" value="Romance" checked> Romance </input><br>
-		    		<input type="checkbox" class="myCheckbox" name="foo" value="Sci-Fi" checked> Sci-Fi </input><br>
-		    		<input type="checkbox" class="myCheckbox" name="foo" value="Thriller" checked> Thriller </input><br>
-		    		<input type="checkbox" class="myCheckbox" name="foo" value="Western" checked> Western </input>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Music" checked> Music </input>
+
 		    	</div>
+
+	   		 	<div class = 'col-md-4 checkboxes'>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Musical" checked> Musical </input><br>
+	   		 		<input type="checkbox" class="myCheckbox" name="foo" value="Romance" checked> Romance </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Sci-Fi" checked> Sci-Fi </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Sport" checked> Sport </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Thriller" checked> Thriller </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="War" checked> War </input><br>
+		    		<input type="checkbox" class="myCheckbox" name="foo" value="Western" checked> Western </input>
+	   		 	</div>
 			</div>
 
-			<div class="col-md-3">
+			<div class="col-md-2">
 				<span id="searchtitle">Search for a film</span><br>
-				<p><em>Film suggestions will appear below.</em></p>
+				<p><em>Film suggestions appear below</em></p>
 				<input type="text" id="search" onkeyup="showResult(this.value)" placeholder="e.g. Inception">
 				<div id="results" class="results">
 				</div>
@@ -85,7 +105,7 @@
 
 		<script>
 		var m = [30, 10, 10, 10],
-		    w = 850 - m[1] - m[3],
+		    w = 900 - m[1] - m[3],
 		    h = 340 - m[0] - m[2];
 
 		var x = d3.scale.ordinal().rangePoints([0, w], 1),
@@ -103,15 +123,17 @@
 		  .append("g")
 		    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-		var selected = 'False'		
+		var selection = 'False'		
 
 		// CREATE A COLOR SCALE
 		var color = d3.scale.ordinal()
-		  .domain(['Mystery', 'Romance', 'Short', 'Sci-Fi', 'Horror', 'Thriller', 'Film-Noir', 'Crime', 'Drama', 'Fantasy', 'Animation', 'Adventure', 'Action', 'Comedy', 'Biography', 'Western'])
-		  .range(['#E74C3C','#9B59B6','#5499C7', '#48C9B0', '#E74C3C','#9B59B6','#5499C7', '#48C9B0', '#E74C3C','#9B59B6','#5499C7', '#48C9B0',
-		  	'#E74C3C','#9B59B6','#5499C7', '#48C9B0']);
-		  //'#229954', '#F7DC6F', '#F5B041', '#D35400', '#1A5276', '#FA8072', '#2E4053', '#B7950B', '#784212', '#641E16', '#A3E4D7', '#D7BDE2'
+		  .domain(["Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Drama", "Family", "Fantasy", "History", "Horror", "Mystery", "Music", 
+		  	"Musical", "Romance", "Sci-Fi", "Sport", "Thriller", "War", "Western"])
+		  .range(['#f25341', '#f1ae40', '#8ae53b', '#15876c', '#25aed1',
+		  	'#355dea', '#ab4ff7', '#f74fe9', '#e81e7f', '#870000']);
 
+
+        //[189,57,75], [110,57,70], [214,55,79], [339,60,75], [120,56,40]
 
 		d3.csv("films.csv", function(error, films) {
 
@@ -147,27 +169,36 @@
 		      .data(films)
 		    .enter().append("path")
 		      .attr("d", path)
+		      .attr('stroke-width', 1.5)
 		      .attr("stroke", function(d) {
 		        var genre = d.genre1;
 		        return color(genre);
 		      })
 		      .on('click', function(data) {
-		      	  selected = 'True'
+		      	  selection = 'True'
 		      	  console.log(this.parentNode);
 		          this.parentNode.appendChild(this)
 		          var selectedline = d3.select(this)
-		          selectedline.style('stroke', '#6EFECD')
+		          selectedline.attr('stroke', '#6EFECD')
 		          selectedline.style('stroke-opacity', 1)
 		            .style('stroke-width', 4);
 		          document.getElementById("filmtitle").innerHTML = data.title;
 				  document.getElementById("filmyear").innerHTML = " (" + data.year + ")";
 		          document.getElementById("genre").innerHTML = data.genre ;
-		          document.getElementById("filminfo").innerHTML = "Director(s): " + data.director;
-		          document.getElementById("writer").innerHTML = 'Writer(s): ' + data.writer;
-		          document.getElementById("cast").innerHTML = 'Cast: ' + data.actor;
+		          document.getElementById("filminfo").innerHTML = "<strong>Director(s)</strong>: " + data.director;
+		          document.getElementById("writer").innerHTML = '<strong>Writer(s)</strong>: ' + data.writer;
+		          document.getElementById("cast").innerHTML = '<strong>Cast</strong>: ' + data.actor;
+				  document.getElementById("gross").innerHTML = '<strong>Box Office</strong>: ' + Math.round(data.boxoffice) + 'M';
+				  document.getElementById("imdb").innerHTML = '<strong>IMDb rating</strong>: ' + data.imdb;
+		          document.getElementById("metacritic").innerHTML = '<strong>Metacritic</strong>: ' + Math.round(data.metacritic) ;
+		          document.getElementById("fcast").innerHTML = '<strong>Female cast</strong>: ' + Math.round(data['% female cast']) + '%';
+		          document.getElementById("fdirector").innerHTML = '<strong>Female directors</strong>: ' + Math.round(data['% female directors']) + '%';
+		          document.getElementById("fproducer").innerHTML = '<strong>Female producers</strong>: ' + Math.round(data['% female producers']) + '%';
+		          document.getElementById("fwriter").innerHTML = '<strong>Female writers</strong>: ' + Math.round(data['% female writers']) + '%';
+		          document.getElementById("fwords").innerHTML = '<strong>Female words</strong>: ' + Math.round(data['% female words']) + '%';
 
 		          document.onkeydown = function(evt) {
-		          	  selected = 'False'
+		          	  selection = 'False'
 		              evt = evt || window.event;
 		              if (evt.keyCode == 27) {
 		              	  removeSelect();
@@ -175,10 +206,13 @@
 		          }
 		        })
 			   .on("mouseover", function(data){
-			   		if (selected === 'False'){
+			   		if (selection === 'False'){
 			    	var mouseline = d3.select(this)
 			    	document.getElementById("filmtitle").innerHTML = data.title;
 			    	}
+			    })
+			   .on("mouseout", function(data){
+			    	var mouseline = d3.select(this)
 			    });
 
 		  // Add a group element for each dimension.
@@ -235,16 +269,18 @@
 		  var genre = this.value,
 		  display = this.checked ? "inline" : "none";
 
-		  svg.selectAll("path")
+		  iets = svg.selectAll("path")
 		    .filter(function(d) { 
-		    	return String(d.genre).includes(String(genre)); 
+		    	return String(d.genre).includes(String(genre));
 		    })
 		    .attr("display", display);
+		  filterlijnen = iets[0].length
 		});
 
 		function removeSelect() {
+			selection = 'False'
 			d3.selectAll("path")
-				.style('stroke-width', 1)
+				.style('stroke-width', 1.5)
 				.style("stroke-opacity", .5)
 		    	.attr("stroke", function(d) {
 			        var genre = d.genre1;
@@ -256,6 +292,14 @@
             document.getElementById("filminfo").innerHTML = '';
             document.getElementById("writer").innerHTML = '';
             document.getElementById("cast").innerHTML = '';
+            document.getElementById("gross").innerHTML = '';
+			document.getElementById("imdb").innerHTML = '';
+		    document.getElementById("metacritic").innerHTML = '' ;
+		    document.getElementById("fcast").innerHTML = '';
+		    document.getElementById("fdirector").innerHTML = '';
+		    document.getElementById("fproducer").innerHTML = '';
+		    document.getElementById("fwriter").innerHTML = '';
+		    document.getElementById("fwords").innerHTML = '';
           }
 
 		function position(d) {
@@ -293,12 +337,13 @@
 	 	  singles = []
 
 		  document.getElementById("counter").innerHTML = '1285/1285 films';
+		  document.getElementById("counter2").innerHTML = '100% of all films';
 		  var actives = dimensions.filter(function(p) { 
 		  		return !y[p].brush.empty(); 
 		  	}),
 		      extents = actives.map(function(p) { return y[p].brush.extent(); });
 		  brushesNumber = actives.length;
-
+		  
 		  foreground.style("display", function(d) {
 		    return actives.every(function(p, i) {
 		      if (extents[i][0] <= d[p] && d[p] <= extents[i][1]) {
@@ -307,8 +352,6 @@
 		      return extents[i][0] <= d[p] && d[p] <= extents[i][1];
 		    }) ? null : "none";
 		  });
-		  console.log(singles);
-		  //console.log(brushesNumber);
 		  realcount = 0;
 
 		  for (index = 0, len = singles.length; index < len; ++index) {
@@ -316,14 +359,15 @@
 		  		realcount = realcount+1;
 		  	}
 		  }
-		  console.log(realcount/brushesNumber);
-		  document.getElementById("counter").innerHTML = realcount/brushesNumber + '/1285 films';
-		}
 
+		  if (brushesNumber > 0){
+			  document.getElementById("counter").innerHTML = realcount/brushesNumber + '/1285 films';
+			  document.getElementById("counter2").innerHTML = Math.round(((realcount/brushesNumber) / 1285) * 100) + '% of all films';
+		  }
+		  }
 
 		document.getElementById('search').onkeyup = function(e){
 			  var query = d3.select("#search")[0][0].value;
-			  console.log(query);
 			  results = []
 			  
 			  if (Object.keys(query).length === 0){
@@ -352,24 +396,41 @@
 
   		  	  var selected = d3.selectAll("path")
 		      .filter(function(d) { 
+		      	if ( String(d.title).toLowerCase() === (String(query).toLowerCase()) ) {
+		      	  selection = 'True'
+		    	  document.getElementById("filmtitle").innerHTML = d.title;
+				  document.getElementById("filmyear").innerHTML = " (" + d.year + ")";
+		          document.getElementById("genre").innerHTML = d.genre ;
+		          document.getElementById("filminfo").innerHTML = "<strong>Director(s)</strong>: " + d.director;
+		          document.getElementById("writer").innerHTML = '<strong>Writer(s)</strong>: ' + d.writer;
+		          document.getElementById("cast").innerHTML = '<strong>Cast</strong>: ' + d.actor;
+				  document.getElementById("gross").innerHTML = '<strong>Box Office</strong>: ' + Math.round(d.boxoffice) + 'M';
+				  document.getElementById("imdb").innerHTML = '<strong>IMDb rating</strong>: ' + d.imdb;
+		          document.getElementById("metacritic").innerHTML = '<strong>Metacritic</strong>: ' + Math.round(d.metacritic) ;
+		          document.getElementById("fcast").innerHTML = '<strong>Female cast</strong>: ' + Math.round(d['% female cast']) + '%';
+		          document.getElementById("fdirector").innerHTML = '<strong>Female directors</strong>: ' + Math.round(d['% female directors']) + '%';
+		          document.getElementById("fproducer").innerHTML = '<strong>Female producers</strong>: ' + Math.round(d['% female producers']) + '%';
+		          document.getElementById("fwriter").innerHTML = '<strong>Female writers</strong>: ' + Math.round(d['% female writers']) + '%';
+		          document.getElementById("fwords").innerHTML = '<strong>Female words</strong>: ' + Math.round(d['% female words']) + '%';
+		    	}
 		    	return String(d.title).toLowerCase() === (String(query).toLowerCase())
 		       })
 	          .attr('stroke', '#6EFECD')
-	          	.style('stroke-opacity', 1)
-	            .style('stroke-width', 4)
+	          .style('stroke-opacity', 1)
+	          .style('stroke-width', 4)
 		    };
 
 		    var foreground2 = d3.select("g").selectAll(".foreground");
 		    foreground2[0][0].appendChild(selected[0][0]);
-		    
-		    document.onkeydown = function(evt) {
-		          	  selected = 'False'
+		  }
+
+		  document.onkeydown = function(evt) {
+		          	  selection = 'False'
 		              evt = evt || window.event;
 		              if (evt.keyCode == 27) {
 		              	  removeSelect();
 		            }
 		        }
-		  }
 
 		  function toggle(source) {
 			  checkboxes = document.getElementsByName('foo');
