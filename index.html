@@ -18,16 +18,16 @@
 				<div class="intro">
 					<h5>Gender inequality in the film industry</h5>
 
-					<p>This visualisation is about gender (in-)equality in the Hollywood film industry. 1285 films are plotted in the graph on the right, where every line is a single film. On the vertical axes are eight variables that show several aspects of the film. You can see the films titles on the left-bottom while hovering. You can also search for a film using the search bar or filter films by genre.</p>
+					<p>This visualisation is about gender inequality in the Hollywood film industry. 1285 films are plotted in the graph on the right, where every line is a single film. On the vertical axes are eight variables that show several aspects of the film. You can see the films titles on the left-bottom while hovering. You can also search for a film using the search bar or filter films by genre.</p>
 
 					<p>Select a line to get more information about the film by <strong>clicking</strong> on it. 
 					When you want to see information about another film, just click another line. When you want to remove the 
 					selected lines press the <strong>ESC</strong> key.<br><p>
 					
-					<p>Make a selection along the y-axis to select data and analyse patterns. To remove the selection, click on the y-axis. It is also possible to drag an axis to another place.<br></p>
+					<p>Make a selection along the y-axis to select data and analyse patterns. The counter shows how many films are selected, unfortunately the counter does not yet work in combination with the genre filtering. To remove the selection, click on the y-axis. It is also possible to drag an axis to another place.<br></p>
 
-					<em><p id="counter">1285/1285 films</p></em>
-					<em><p id="counter2">100% of all films</p></em>
+					<em><span id="counter">1285/1285 films</span></em>
+					<em><span id="counter2">100% of all films</span></em>
 				</div>
 			</div>	
 
@@ -189,6 +189,7 @@
 		          document.getElementById("filminfo").innerHTML = "<strong>Director(s)</strong>: " + data.director;
 		          document.getElementById("writer").innerHTML = '<strong>Writer(s)</strong>: ' + data.writer;
 		          document.getElementById("cast").innerHTML = '<strong>Cast</strong>: ' + data.actor;
+
 				  document.getElementById("gross").innerHTML = '<strong>Box Office</strong>: ' + Math.round(data.boxoffice) + 'M';
 				  document.getElementById("imdb").innerHTML = '<strong>IMDb rating</strong>: ' + data.imdb;
 		          document.getElementById("metacritic").innerHTML = '<strong>Metacritic</strong>: ' + Math.round(data.metacritic) ;

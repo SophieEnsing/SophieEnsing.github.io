@@ -16,6 +16,14 @@ h5, #filmtitle, #filmyear, #filtertitle, #searchtitle{
   text-transform: uppercase;
 }
 
+#counter {
+  float: left;
+}
+
+#counter2 {
+  float: right;
+}
+
 #search {
   width: 182px;
   height: 25px;
@@ -74,7 +82,7 @@ button {
     color: #313131;
 }
 
-p, .checkboxes{
+p, .checkboxes, #counter, #counter2{
   font-family: 'Merriweather', serif;
   font-size: 8pt;
   text-align: justify;
