@@ -193,7 +193,7 @@
 	// set the dimensions and margins of the graph
 	var margin = {top: 30, right: 50, bottom: 10, left: 80},
 	  width = 1400 - margin.left - margin.right,
-	  height = 630 - margin.top - margin.bottom;
+	  height = 650 - margin.top - margin.bottom;
 
 	// append the svg object to the body of the page
 	var svg = d3.select("#my_dataviz")
@@ -284,6 +284,7 @@
 			.each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(y[d])); })
 			// Add axis title
 			.append("text")
+			  .style("font-size", "6px")
 			  .style("text-anchor", "middle")
 			  .attr("y", function(d,i) { return i%2 == 0 ? -14 : -30 } )
 			  .text(function(d) { return d; })
