@@ -191,7 +191,7 @@
 	for (let genre of genres) $('.genrefilter').append($('<option>').val(genre).text(genre));
 
 	// set the dimensions and margins of the graph
-	var margin = {top: 30, right: 50, bottom: 10, left: 80},
+	var margin = {top: 40, right: 50, bottom: 10, left: 80},
 	  width = 1400 - margin.left - margin.right,
 	  height = 650 - margin.top - margin.bottom;
 
@@ -284,7 +284,7 @@
 			.each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(y[d])); })
 			// Add axis title
 			.append("text")
-			  .style("font-size", "6px")
+			  .style("font-size", "8px")
 			  .style("text-anchor", "middle")
 			  .attr("y", function(d,i) { return i%2 == 0 ? -14 : -30 } )
 			  .text(function(d) { return d; })
