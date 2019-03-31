@@ -284,7 +284,7 @@
 			.each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(y[d])); })
 			// Add axis title
 			.append("text")
-			  .style("font-size", "8px")
+			  .style("font-size", "7px")
 			  .style("text-anchor", "middle")
 			  .attr("y", function(d,i) { return i%2 == 0 ? -14 : -30 } )
 			  .text(function(d) { return d; })
