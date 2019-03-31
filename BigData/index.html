@@ -1,1 +1,382 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<!-- Load d3.js -->
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+	<!-- A bit of style -->
+	<style>
+	.filters {
+		width: 120px;
+		margin: 10px;
+		font-family: 'Montserrat'; 
+	}
+	.header {
+		text-align: center;
+		margin: 30px 0;
+		font-family: 'Montserrat'; 
+	}
+	.axis {
+	  opacity: 0.4;
+	}
+	.axis:hover {
+	  opacity: 1;
+	}
 
+	.submitfilters {
+		background: #3498db;
+		width: 180px;
+		padding: 4px;
+		border: none;
+		border-radius: 3px;
+		font-family: 'Montserrat'; 
+		text-align: center;
+		text-transform: uppercase;
+		color: #FFF;
+		user-select: none;
+	}
+
+	.submitfilters:hover {
+		cursor: pointer;
+	}
+
+	.filteroptions {
+		margin-left: 20%;
+		margin-right: 20%;
+		text-align: center;
+	}
+
+	#legenda {
+		height: 100px;
+		width: 100px;
+		background-color:green;
+	}
+	</style>
+
+</head>
+
+<body>
+	<!-- Create a div where the graph will take place -->
+	<h1 class="header">BIG DATA VISUALISATION</h1>
+	<div id="my_dataviz"></div>
+	<div class="filteroptions">
+		<select id="genrefilter1" class="filters genrefilter" >
+			<option disabled>Genre 1</option>
+		</select>
+
+		<select id="yearfilter1" class="filters yearfilter">
+			<option disabled="">Year genre 1</option>
+		</select>
+
+		<select id="genrefilter2" class="filters genrefilter">
+			<option disabled>Genre 2</option>
+		</select>
+
+		<select id="yearfilter2" class="filters yearfilter">
+			<option disabled>Year genre 2</option>
+		</select>
+
+		<input type="submit" class="submitfilters" value="Submit">
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script>
+	const genres = ['Blues',
+ 'Country',
+ 'Electronic',
+ 'Folk',
+ 'Jazz',
+ 'Latin',
+ 'Metal',
+ 'New Age',
+ 'Pop',
+ 'Punk',
+ 'Rap',
+ 'Reggae',
+ 'RnB',
+ 'Rock',
+ 'World'];
+
+	const years = [1922,
+ 1924,
+ 1925,
+ 1926,
+ 1927,
+ 1928,
+ 1929,
+ 1930,
+ 1931,
+ 1932,
+ 1933,
+ 1934,
+ 1935,
+ 1936,
+ 1937,
+ 1938,
+ 1939,
+ 1940,
+ 1941,
+ 1942,
+ 1943,
+ 1944,
+ 1945,
+ 1946,
+ 1947,
+ 1948,
+ 1949,
+ 1950,
+ 1951,
+ 1952,
+ 1953,
+ 1954,
+ 1955,
+ 1956,
+ 1957,
+ 1958,
+ 1959,
+ 1960,
+ 1961,
+ 1962,
+ 1963,
+ 1964,
+ 1965,
+ 1966,
+ 1967,
+ 1968,
+ 1969,
+ 1970,
+ 1971,
+ 1972,
+ 1973,
+ 1974,
+ 1975,
+ 1976,
+ 1977,
+ 1978,
+ 1979,
+ 1980,
+ 1981,
+ 1982,
+ 1983,
+ 1984,
+ 1985,
+ 1986,
+ 1987,
+ 1988,
+ 1989,
+ 1990,
+ 1991,
+ 1992,
+ 1993,
+ 1994,
+ 1995,
+ 1996,
+ 1997,
+ 1998,
+ 1999,
+ 2000,
+ 2001,
+ 2002,
+ 2003,
+ 2004,
+ 2005,
+ 2006,
+ 2007,
+ 2008,
+ 2009,
+ 2010];
+
+	// loop over years and genres
+	for (let year of years) $('.yearfilter').append($('<option>').val(year).text(year));
+	for (let genre of genres) $('.genrefilter').append($('<option>').val(genre).text(genre));
+
+	// set the dimensions and margins of the graph
+	var margin = {top: 30, right: 50, bottom: 10, left: 80},
+	  width = 1400 - margin.left - margin.right,
+	  height = 630 - margin.top - margin.bottom;
+
+	// append the svg object to the body of the page
+	var svg = d3.select("#my_dataviz")
+		.append("svg")
+		  .attr("width", width + margin.left + margin.right)
+		  .attr("height", height + margin.top + margin.bottom)
+		.append("g")
+		  .attr("transform",
+	        "translate(" + margin.left + "," + margin.top + ")");
+
+	// Parse the Data
+	d3.csv("total_agg.csv", function(data) {
+		// Color scale: give me a specie name, I return a color
+		var color = d3.scaleOrdinal()
+			.domain(['Rap','Rock','Latin','Jazz','Electronic','Pop','Metal','RnB','Country','Reggae','Blues','Folk','Punk','World','New Age'])
+
+			.range([ "#ff0000", "#ff6868", "#ff9a68","#ff5400", "#ffbf00", "#fff600", "#bbff00", "#00d103", "#00ff77", "#007896", "#00a5ff", "#0033ff", "#6100ff", "#ae00ff", "#ff00b2"])
+
+		// Here I set the list of dimension manually to control the order of axis:
+		dimensions = ["duration","key","loudness","mode","tempo","time_signature","segments_pitches_mean_0","segments_pitches_mean_1","segments_pitches_mean_2","segments_pitches_mean_3","segments_pitches_mean_4",'segments_pitches_mean_5',"segments_pitches_mean_6","segments_pitches_mean_7","segments_pitches_mean_8","segments_pitches_mean_9","segments_pitches_mean_10","segments_pitches_mean_11","segments_timbre_mean_1","segments_timbre_mean_2","segments_timbre_mean_3","segments_timbre_mean_4","segments_timbre_mean_5","segments_timbre_mean_6","segments_timbre_mean_7","segments_timbre_mean_8","segments_timbre_mean_9","segments_timbre_mean_10","segments_timbre_mean_11"]
+
+		// For each dimension, I build a linear scale. I store all in a y object
+		var y = {}
+		for (i in dimensions) {
+		name = dimensions[i]
+		y[name] = d3.scaleLinear()
+		  // .domain([-50, 50])
+		  .domain(d3.extent(data, function(p) { return +p[name]; }))
+          .range([500, 0]);
+		}
+
+		// Build the X scale -> it find the best position for each Y axis
+		x = d3.scalePoint()
+		.range([0, width])
+		.domain(dimensions);
+
+		// Highlight the specie that is hovered
+		var highlight = function(d){
+			selected_specie = d.genre
+			// first every group turns grey
+			d3.selectAll(".line")
+			  .transition().duration(200)
+			  .style("stroke", "#bcbcbc")
+			  .style("opacity", "0.1")
+			// Second the hovered specie takes its color
+			d3.selectAll("." + selected_specie)
+			  .transition().duration(200)
+			  .style("stroke", color(selected_specie))
+			  .style("opacity", "1")
+		}
+
+		// Unhighlight
+		var doNotHighlight = function(d){
+		d3.selectAll(".line")
+		  .transition().duration(200).delay(100)
+		  .style("stroke", function(d){ return( color(d.genre))} )
+		  .style("opacity", "1")
+		}
+
+		// The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
+		function path(d) {
+		  return d3.line()(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
+		}
+
+		// Draw the lines
+		svg.selectAll("myPath")
+			.data(data)
+			.enter()
+			.append("path")
+			  .attr("class", function (d) { return "line " + d.genre } )
+			  .attr("d",  path)
+			  .style("fill", "none" )
+			  .style("stroke", function(d){ return( color(d.genre))} )
+			  .style("opacity", 0.3)
+			  .on("mouseover", highlight)
+			  .on("mouseleave", doNotHighlight )
+			  // .attr("display","none")
+
+		// Draw the axis:
+		svg.selectAll("myAxis")
+			// For each dimension of the dataset I add a 'g' element:
+			.data(dimensions).enter()
+			.append("g")
+			.attr("class", "axis")
+			// I translate this element to its right position on the x axis
+			.attr("transform", function(d) { return "translate(" + x(d) + ")"; })
+			// And I build the axis with the call function
+			.each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(y[d])); })
+			// Add axis title
+			.append("text")
+			  .style("text-anchor", "middle")
+			  .attr("y", -9)
+			  .text(function(d) { return d; })
+			  .style("fill", "black")
+		
+		d3.select('.submitfilters')
+			.on('click', function(d) {
+					var genre1 = (document.getElementById('genrefilter1')).options[document.getElementById('genrefilter1').selectedIndex].value;
+					var year1 = (document.getElementById('yearfilter1')).options[document.getElementById('yearfilter1').selectedIndex].value;
+
+					var genre2 = (document.getElementById('genrefilter2')).options[document.getElementById('genrefilter2').selectedIndex].value;
+					var year2 = (document.getElementById('yearfilter2')).options[document.getElementById('yearfilter2').selectedIndex].value;
+					
+					var source1 = genre1.concat(year1, ".csv");
+					var source2 = genre2.concat(year2, ".csv");
+					svg.selectAll('path.line').remove();
+
+					update(source1);
+					update(source2);
+				}
+			);
+
+		var legend = svg.selectAll('.legend')
+          .data(color.domain())
+          .enter()
+          .append('g')
+          .attr('class', 'legend')
+          .attr('transform', function(d, i) {
+            var height = 100;
+            var offset =  100 * color.domain().length / 2; 
+            var horz = i * 85;
+            var vert = 550;
+            return 'translate(' + horz + ',' + vert + ')';       
+          });
+
+        legend.append('rect')
+          .attr('width', 15)
+          .attr('height', 15)
+          .style('fill', color)
+          .style('stroke', color);
+          
+        legend.append('text')
+          .attr('x', 20)
+          .attr('y', 15)
+          .attr('font-family', "Montserrat")
+          .attr('font-size', "8pt")
+          .text(function(d) { return d; });  
+
+		// update function:
+		function update(source) {
+			d3.csv(source,function(error,data) {
+				// svg.selectAll('g.axis').remove();
+				// svg.selectAll('text.y').remove();
+				// for (i in dimensions) {
+				// name = dimensions[i]
+				// y[name] = d3.scaleLinear()
+				//   .domain(d3.extent(data, function(p) { return +p[name]; }))
+		  //         .range([500, 0]);
+				// };
+
+				// // Draw the axis:
+				// svg.selectAll("myAxis")
+				// 	// For each dimension of the dataset I add a 'g' element:
+				// 	.data(dimensions)
+				// 	.enter()
+				// 	.append("g")
+				// 	.attr("class", "axis")
+				// 	// I translate this element to its right position on the x axis
+				// 	.attr("transform", function(d) { return "translate(" + x(d) + ")"; })
+				// 	// And I build the axis with the call function
+				// 	.each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(y[d])); })
+				// 	// Add axis title
+				// 	.append("text")
+				// 	  .style("text-anchor", "middle")
+				// 	  .attr("y", -9)
+				// 	  .text(function(d) { return d; })
+				// 	  .style("fill", "black")
+
+				svg.selectAll("myPath")
+					.data(data)
+					.enter()
+					.append("path")
+					  .attr("class", function (d) { return "line " + d.genre } )
+					  .attr("d",  path)
+					  .style("fill", "none" )
+					  .style("stroke", function(d){ return( color(d.genre))} )
+					  .style("opacity", 1)
+					  .on("mouseover", highlight)
+					  .on("mouseleave", doNotHighlight )
+
+				
+			});
+		};
+	});
+	</script>
+</body>
